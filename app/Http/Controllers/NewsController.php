@@ -29,7 +29,7 @@ class NewsController extends BaseController
         }
 
         $news = News::create($input);
-        $news->categories()->attach($input['category']);
+        // $news->categories()->attach($input['category']);
         return $this->sendResponse(new NewsResource($news), 'News created successfully.');
     }
 
@@ -50,8 +50,6 @@ class NewsController extends BaseController
 
         $validator = Validator::make($input, [
             'title' => 'required',
-            'status' => 'required'
-
         ]);
 
         if ($validator->fails()) {
@@ -60,9 +58,16 @@ class NewsController extends BaseController
         $news = News::find($id); // Retrieve the user with ID 1
         if ($news) {
             $news->title = $input['title'];
-            $news->status = $input['status'];
+            $news->brief = $input['brief'];
+            $news->imageone = $input['imageone'];
+            $news->imagetwo = $input['imagetwo'];
+            $news->audioone = $input['audioone'];
+            $news->audiotwo = $input['audiotwo'];
+            $news->description = $input['description'];
+            $news->orderby = $input['orderby'];
+            
             $news->save();
-            $news->categories()->sync($input['category']);
+            // $news->categories()->sync($input['category']);
             return $this->sendResponse(new NewsResource($news), 'News updated successfully.');
         } else {
             return $this->sendError('Data Not Found');

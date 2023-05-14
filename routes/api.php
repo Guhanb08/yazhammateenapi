@@ -29,7 +29,11 @@ Route::controller(RegisterController::class)->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('tags', TagsController::class);
     Route::apiResource('category', CategoryController::class);
-    Route::apiResource('news', NewsController::class);
+    Route::apiResource('article', NewsController::class);
+    Route::get('/categories', [CategoryController::class, 'getCategories']);
+    Route::get('/categories/subcategories/{id}', [CategoryController::class, 'getSubCategoriesByCategoryId']);
+    Route::get('/subcategories', [CategoryController::class, 'getSubCategories']);
+    Route::get('/childcategories', [CategoryController::class, 'getChildCategories']);
 
 
 });

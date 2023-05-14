@@ -16,7 +16,7 @@ class Category extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'title', 'brief' , 'description' , 'parent_id'   , 'status'
+        'title', 'type', 'slug' , 'brief' , 'description' , 'parent_id' , 'category_id' , 'status'
     ];
 
     public function parent()
@@ -39,4 +39,9 @@ class Category extends Model
     {
         return $this->children()->with('descendants');
     }
+
+    public function ancestors()
+{
+    return $this->belongsTo(Category::class, 'parent_id')->with('ancestors');
+}
 }

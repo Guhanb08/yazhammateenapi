@@ -15,8 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('brief')->nullable();
+            $table->text('imageone')->nullable();
+            $table->text('imagetwo')->nullable();
+            $table->text('audioone')->nullable();
+            $table->text('audiotwo')->nullable();
             $table->text('description')->nullable();
-            $table->boolean('status')->default(true);
+            $table->integer('orderby')->nullable();
+            $table->string('status')->default('Active');
             $table->softDeletes();
             $table->timestamps();
         });
