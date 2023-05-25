@@ -28,9 +28,19 @@ class NewsController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors());
         }
 
-        $news = News::create($input);
-        // $news->categories()->attach($input['category']);
-        return $this->sendResponse(new NewsResource($news), 'News created successfully.');
+
+        $newsExists = News::where('slug', $input['slug'])->first();
+
+        if (!$newsExists) {
+            $news = News::create($input);
+            $news->categories()->attach($input['categoryid']);
+            $news->tags()->attach($input['tags']);
+            $news->speciality()->attach($input['specialities']);
+            return $this->sendResponse(new NewsResource($news), 'News created successfully.');
+        } else {
+            return $this->sendError('Slug Already Exists', $validator->errors());
+        }
+     
     }
 
     public function show($id)
@@ -41,6 +51,15 @@ class NewsController extends BaseController
             return $this->sendError('News not found.');
         }
 
+        return $this->sendResponse(new NewsResource($news), 'News retrieved successfully.');
+    }
+
+    public function getArticlesbyslug($slug)
+    {
+        $news = News::where('slug', $slug)->first();
+        if (is_null($news)) {
+            return $this->sendError('News not found.');
+        }
         return $this->sendResponse(new NewsResource($news), 'News retrieved successfully.');
     }
 
@@ -55,19 +74,51 @@ class NewsController extends BaseController
         if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
         }
+
+        $newsExists = News::where('slug', $input['slug'])->where('id', '!=', $id)->first();
+        if (!$newsExists) {
+            $news = News::find($id); // Retrieve the user with ID 1
+            if ($news) {
+                $news->title = $input['title'];
+                $news->brief = $input['brief'];
+                $news->slug = $input['slug'];
+                $news->categoryid = $input['categoryid'] ;
+                $news->subcategoryid =  isset($input['subcategoryid']) ? $input['subcategoryid'] :   null;
+                $news->childcategoryid = isset($input['childcategoryid']) ? $input['childcategoryid'] :    null;
+                $news->imageone = $input['imageone'];
+                $news->imagetwo = $input['imagetwo'];
+                $news->imagethree = $input['imagethree'];
+                $news->imagefour = $input['imagefour'];
+                $news->author = $input['author'];
+                $news->specname = $input['specname'];
+                $news->articledate = $input['articledate'];
+                $news->status = $input['status'];
+                $news->audioone = $input['audioone'];
+                $news->audiotwo = $input['audiotwo'];
+                $news->description = $input['description'];
+                $news->orderby = $input['orderby'];
+                $news->save();
+                $news->categories()->sync($input['categoryid']);
+                $news->tags()->sync($input['tags']);
+                $news->speciality()->sync($input['specialities']);
+                return $this->sendResponse(new NewsResource($news), 'News updated successfully.');
+            } else {
+                return $this->sendError('Data Not Found');
+            }
+        } else {
+            return $this->sendError('Slug Already Exists', $validator->errors());
+        }
+
+     
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $input = $request->all();
         $news = News::find($id); // Retrieve the user with ID 1
         if ($news) {
-            $news->title = $input['title'];
-            $news->brief = $input['brief'];
-            $news->imageone = $input['imageone'];
-            $news->imagetwo = $input['imagetwo'];
-            $news->audioone = $input['audioone'];
-            $news->audiotwo = $input['audiotwo'];
-            $news->description = $input['description'];
-            $news->orderby = $input['orderby'];
-            
+            $news->status = $input['status'];
             $news->save();
-            // $news->categories()->sync($input['category']);
             return $this->sendResponse(new NewsResource($news), 'News updated successfully.');
         } else {
             return $this->sendError('Data Not Found');
@@ -87,4 +138,17 @@ class NewsController extends BaseController
             return $this->sendError('Data Not Found');
         }
     }
+
+    public function getArticlesbySpeciality(Request $request, $slug)
+    {
+   
+        $param = $request->query('pagesize');
+
+        $news = News::whereHas('speciality', function ($query) use ($slug) {
+            $query->where('name', $slug);
+        })->paginate($param);
+
+        return $this->sendResponse($news, 'News retrieved successfully.');
+    }
+
 }

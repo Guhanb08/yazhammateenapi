@@ -21,6 +21,7 @@ class SubcategoryResource extends JsonResource
             "type" => $this->type,
             "slug" => $this->slug,
             "brief" => $this->brief,
+            "orderby" => $this->orderby,
             "description" => $this->description,
             "parent_id" => $this->parent_id,
             "category_id" => $this->category_id,

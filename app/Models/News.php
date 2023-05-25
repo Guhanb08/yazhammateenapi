@@ -15,7 +15,7 @@ class News extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'title', 'brief' , 'imageone' ,   'imagetwo' ,  'audioone' ,  'audiotwo' ,  'orderby' , 'status' , 'description'
+        'title', 'brief' , 'imageone' , 'specname',  'imagetwo' ,  'imagethree' , 'imagefour' , 'author','articledate', 'audioone' , 'categoryid', 'subcategoryid', 'childcategoryid', 'slug' ,  'audiotwo' ,  'orderby' , 'status' , 'description'
     ];
 
     // In the News model
@@ -23,4 +23,16 @@ class News extends Model
     {
         return $this->belongsToMany(Category::class , 'news_categories');
     }
+
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tags::class , 'news_tags' , 'news_id', 'tag_id');
+    }
+
+    public function speciality()
+    {
+        return $this->belongsToMany(Speciality::class , 'news_speciality' ,  'news_id', 'speciality_id');
+    }
+
 }

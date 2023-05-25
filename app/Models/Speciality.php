@@ -7,8 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
-class Tags extends Model
+
+class Speciality extends Model
 {
+
+    protected $table = 'speciality'; 
+
     use HasFactory;
 
     use SoftDeletes;
@@ -16,12 +20,11 @@ class Tags extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'title', 'slug' , 'brief' , 'icon', 'orderby' ,  'isgeneral' , 'status'
+        'name',   'title', 'slug' , 'brief' , 'icon', 'orderby'  , 'status'
     ];
 
     public function news()
     {
-        return $this->belongsToMany(News::class  , 'news_tags');
+        return $this->belongsToMany(News::class  , 'news_speciality');
     }
-
 }

@@ -11,16 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('speciality', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('type')->default('Active');
+            $table->string('name');
             $table->text('slug')->nullable();
             $table->text('brief')->nullable();
-            $table->text('description')->nullable();
-            $table->unsignedBigInteger('parent_id')->nullable();
-            $table->foreign('parent_id')->references('id')->on('categories')->onDelete('cascade');
-            $table->integer('category_id')->nullable();
+            $table->string('icon')->nullable();
             $table->integer('orderby')->nullable();
             $table->string('status')->default('Inactive');
             $table->softDeletes();
@@ -33,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('speciality');
     }
 };

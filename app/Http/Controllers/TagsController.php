@@ -12,7 +12,7 @@ class TagsController extends BaseController
 {
     public function index()
     {
-        $tags = Tags::all();
+        $tags = Tags::orderBy('orderby', 'asc')->get();
 
         return $this->sendResponse(TagsResource::collection($tags), 'Tags retrieved successfully.');
     }
@@ -50,8 +50,6 @@ class TagsController extends BaseController
 
         $validator = Validator::make($input, [
             'title' => 'required',
-            'status' => 'required'
-
         ]);
 
         if ($validator->fails()) {
@@ -60,7 +58,13 @@ class TagsController extends BaseController
         $tags = Tags::find($id); // Retrieve the user with ID 1
         if ($tags) {
             $tags->title = $input['title'];
+            $tags->slug = $input['slug'];
+            $tags->brief =   isset($input['brief']) ? $input['brief'] :   $tags->brief ;
+            $tags->icon = $input['icon'];
+            $tags->orderby = $input['orderby'];
+            $tags->isgeneral = $input['isgeneral'];
             $tags->status = $input['status'];
+
             $tags->save();
             return $this->sendResponse(new TagsResource($tags), 'Tags updated successfully.');
         } else {

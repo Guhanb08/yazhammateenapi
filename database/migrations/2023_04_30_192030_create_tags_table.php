@@ -14,8 +14,12 @@ return new class extends Migration
         Schema::create('tags', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->text('slug')->nullable();
             $table->text('brief')->nullable();
-            $table->boolean('status')->default(true);
+            $table->string('icon')->nullable();
+            $table->integer('orderby')->nullable();
+            $table->string('isgeneral')->default('No');
+            $table->string('status')->default('Inactive');
             $table->softDeletes();
             $table->timestamps();
         });

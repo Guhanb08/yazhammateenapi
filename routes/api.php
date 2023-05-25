@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\BannerController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\SpecialityController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TagsController;
@@ -26,17 +28,25 @@ Route::controller(RegisterController::class)->group(function () {
     Route::post('login', 'login');
 });
 
-Route::middleware('auth:sanctum')->group(function () {
+// Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('tags', TagsController::class);
+    Route::apiResource('speciality', SpecialityController::class);
     Route::apiResource('category', CategoryController::class);
     Route::apiResource('article', NewsController::class);
+    Route::apiResource('banner', BannerController::class);
     Route::get('/categories', [CategoryController::class, 'getCategories']);
-    Route::get('/categories/subcategories/{id}', [CategoryController::class, 'getSubCategoriesByCategoryId']);
     Route::get('/subcategories', [CategoryController::class, 'getSubCategories']);
     Route::get('/childcategories', [CategoryController::class, 'getChildCategories']);
+    Route::get('/subcategories/category/{id}', [CategoryController::class, 'getSubCategoriesByCategoryId']);
+
+    Route::get('/articles/category/{slug}', [CategoryController::class, 'getArticlesbyslug']);
+    Route::get('/articles/speciality/{slug}', [NewsController::class, 'getArticlesbySpeciality']);
+    Route::get('/articles/{slug}', [NewsController::class, 'getArticlesbyslug']);
+    Route::put('/article/status/{id}', [NewsController::class, 'updateStatus']);
 
 
-});
+
+// });
 
 
 /*

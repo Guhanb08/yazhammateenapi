@@ -10,6 +10,7 @@ use App\Http\Resources\ChildcategoryResource;
 use App\Http\Resources\SubcategoryResource;
 
 use Validator;
+
 class CategoryController extends BaseController
 {
     public function index()
@@ -45,14 +46,22 @@ class CategoryController extends BaseController
             'title' => 'required',
             'slug' => 'required',
             'type' => 'required',
-            // 'status' => 'required',
+            'status' => 'required',
         ]);
 
         if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
         }
 
-        $category = Category::create($input);
+        // $category = Category::create($input);
+
+        $categoryExists = Category::where('slug', $input['slug'])->first();
+
+        if (!$categoryExists) {
+            $category = Category::create($input);
+        } else {
+            return $this->sendError('Slug Already Exists', $validator->errors());
+        }
 
         return $this->sendResponse(new CategoryResource($category), 'Category created successfully.');
     }
@@ -77,24 +86,34 @@ class CategoryController extends BaseController
         $validator = Validator::make($input, [
             'title' => 'required',
             'slug' => 'required',
+            'type' => 'required',
+            'status' => 'required',
         ]);
 
         if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
         }
-        $category = Category::find($id); // Retrieve the user with ID 1
-        if ($category) {
-            $category->title = $input['title'];
-            $category->slug = $input['slug'];
-            $category->brief = $input['brief'];
-            $category->type =  $input['type'];
-            $category->parent_id = isset($input['parent_id']) ? $input['parent_id'] : null;
-            $category->category_id = isset($input['category_id']) ? $input['category_id'] : null;
 
-            $category->save();
-            return $this->sendResponse(new CategoryResource($category), 'Category updated successfully.');
+        $categoryExists = Category::where('slug', $input['slug'])->where('id', '!=', $id)->first();
+
+        if (!$categoryExists) {
+            $category = Category::find($id); // Retrieve the user with ID 1
+            if ($category) {
+                $category->title = $input['title'];
+                $category->slug = $input['slug'];
+                $category->status = $input['status'];
+                $category->orderby = $input['orderby'];
+                $category->brief = $input['brief'];
+                $category->type =  $input['type'];
+                $category->parent_id = isset($input['parent_id']) ? $input['parent_id'] :    $category->parent_id;
+                $category->category_id = isset($input['category_id']) ? $input['category_id'] : $category->category_id;
+                $category->save();
+                return $this->sendResponse(new CategoryResource($category), 'Category updated successfully.');
+            } else {
+                return $this->sendError('Data Not Found');
+            }
         } else {
-            return $this->sendError('Data Not Found');
+            return $this->sendError('Slug Already Exists', $validator->errors());
         }
     }
 
@@ -112,19 +131,21 @@ class CategoryController extends BaseController
 
     public function getCategories()
     {
-        $categories = Category::where('type', 'category')->get();
+        $categories = Category::where('type', 'category')->orderBy('orderby', 'asc')->get();
         return $this->sendResponse($categories, 'Category retrieved successfully.');
     }
 
     public function getSubCategories()
     {
-        $categories = Category::where('type', 'Subcategory')->with('parent')->get();
-        return $this->sendResponse( SubcategoryResource::collection($categories), 'Category retrieved successfully.');
+        // ->with('parent')
+        $categories = Category::where('type', 'Subcategory')->orderBy('orderby', 'asc')->get();
+        return $this->sendResponse(SubcategoryResource::collection($categories), 'Category retrieved successfully.');
     }
 
     public function getChildCategories()
     {
-        $categories = Category::where('type', 'Childcategory')->with('ancestors')->get();
+        // ->with('ancestors')
+        $categories = Category::where('type', 'Childcategory')->orderBy('orderby', 'asc')->get();
         return $this->sendResponse(ChildcategoryResource::collection($categories), 'Category retrieved successfully.');
     }
 
@@ -135,4 +156,12 @@ class CategoryController extends BaseController
         return $this->sendResponse($subcategories, 'Category retrieved successfully.');
     }
 
+
+    public function getArticlesbyslug($slug)
+    {
+        $category = Category::where('slug', $slug)->first();
+        $news = $category->news()->orderBy('orderby', 'asc')->paginate(10);
+
+        return $this->sendResponse($news, 'Articles retrieved successfully.');
+    }
 }

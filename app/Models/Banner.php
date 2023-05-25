@@ -6,22 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-
-class Tags extends Model
+class Banner extends Model
 {
     use HasFactory;
 
     use SoftDeletes;
-
     protected $dates = ['deleted_at'];
+    protected $table = 'banner'; 
 
     protected $fillable = [
-        'title', 'slug' , 'brief' , 'icon', 'orderby' ,  'isgeneral' , 'status'
+        'name', 'value', 'orderby', 'status'
     ];
-
-    public function news()
-    {
-        return $this->belongsToMany(News::class  , 'news_tags');
-    }
-
 }
