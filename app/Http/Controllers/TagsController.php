@@ -59,7 +59,7 @@ class TagsController extends BaseController
         if ($tags) {
             $tags->title = $input['title'];
             $tags->slug = $input['slug'];
-            $tags->brief =   isset($input['brief']) ? $input['brief'] :   $tags->brief ;
+            $tags->brief =   isset($input['brief']) ? $input['brief'] :   $tags->brief;
             $tags->icon = $input['icon'];
             $tags->orderby = $input['orderby'];
             $tags->isgeneral = $input['isgeneral'];
@@ -84,5 +84,17 @@ class TagsController extends BaseController
         } else {
             return $this->sendError('Data Not Found');
         }
+    }
+
+    public function getallarticles()
+    {
+
+
+        $tagsWithArticles = Tags::with('news')
+            ->where('status', 'Active')
+            ->orderBy('orderby', 'asc') // Replace 'column_name' with the actual column name you want to use for ordering
+            ->get();
+
+        return $this->sendResponse(TagsResource::collection($tagsWithArticles), 'Tags retrieved successfully.');
     }
 }

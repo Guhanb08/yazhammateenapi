@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SpecialityController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TagsController;
@@ -43,6 +44,9 @@ Route::controller(RegisterController::class)->group(function () {
     Route::get('/articles/speciality/{slug}', [NewsController::class, 'getArticlesbySpeciality']);
     Route::get('/articles/{slug}', [NewsController::class, 'getArticlesbyslug']);
     Route::put('/article/status/{id}', [NewsController::class, 'updateStatus']);
+    Route::get('/allbanner', [BannerController::class, 'getallbanners']);
+    Route::get('/tagswitharticles', [TagsController::class, 'getallarticles']);
+
 
 
 

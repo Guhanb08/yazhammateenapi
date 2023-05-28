@@ -33,7 +33,7 @@ class NewsResource extends JsonResource
             "imagefour" => $this->imagefour,
             "author" => $this->author,
             "specname" => $this->specname,
-            "articledate" => $this->articledate ,
+            "articledate" =>  $this->articledate ,
             "audioone" => $this->audioone,
             "audiotwo" => $this->audiotwo,
             "description" => $this->description,
@@ -51,3 +51,4 @@ class NewsResource extends JsonResource
         ];
     }
 }
+

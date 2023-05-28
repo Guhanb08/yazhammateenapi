@@ -33,7 +33,8 @@ class NewsController extends BaseController
 
         if (!$newsExists) {
             $news = News::create($input);
-            $news->categories()->attach($input['categoryid']);
+            $catid = isset($input['childcategoryid']) ? $input['childcategoryid'] :   $input['subcategoryid'];
+            $news->categories()->attach($catid);
             $news->tags()->attach($input['tags']);
             $news->speciality()->attach($input['specialities']);
             return $this->sendResponse(new NewsResource($news), 'News created successfully.');
@@ -98,7 +99,8 @@ class NewsController extends BaseController
                 $news->description = $input['description'];
                 $news->orderby = $input['orderby'];
                 $news->save();
-                $news->categories()->sync($input['categoryid']);
+                $catid =  isset($input['childcategoryid']) ? $input['childcategoryid'] :   $input['subcategoryid'];
+                $news->categories()->sync($catid);
                 $news->tags()->sync($input['tags']);
                 $news->speciality()->sync($input['specialities']);
                 return $this->sendResponse(new NewsResource($news), 'News updated successfully.');

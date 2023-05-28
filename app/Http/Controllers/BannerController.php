@@ -16,6 +16,21 @@ class BannerController extends BaseController
 
         return $this->sendResponse(BannerResource::collection($banner), 'Banner retrieved successfully.');
     }
+    public function getallbanners()
+    {
+        $banner = Banner::all();
+
+        $result = [];
+
+
+        foreach ($banner as $item) {
+            $name = $item['name'];
+            $value = $item['value'];
+            $result[$name] = $value;
+        }
+        return $this->sendResponse($result, 'Banner retrieved successfully.');
+
+    }
     public function store(Request $request)
     {
         $input = $request->all();

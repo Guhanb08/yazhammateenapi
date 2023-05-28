@@ -13,19 +13,25 @@ use Validator;
 
 class CategoryController extends BaseController
 {
-    public function index()
+    public function index(Request $request)
     {
-        $category = Category::whereNull('parent_id')->get();
+       $query =  Category::whereNull('parent_id');
+
+        if ($request->has('status')) {
+            $status = $request->input('status');
+            $query->where('status', $status);
+        }
+        $query->orderBy('orderby', 'asc');
+        $category = $query->get();
 
         $categoriesWithSubcategories = $this->getCategoriesWithSubcategories($category);
 
         return $this->sendResponse($categoriesWithSubcategories, 'Category retrieved successfully.');
     }
 
-
     private function getCategoriesWithSubcategories($categories)
     {
-        return $categories->map(function ($category) {
+        return $categories->where('status', 'Active')->map(function ($category) {
             return [
                 'id' => $category->id,
                 'title' => $category->title,
@@ -33,10 +39,13 @@ class CategoryController extends BaseController
                 'brief' => $category->brief,
                 'description' => $category->description,
                 'status' => $category->status,
-                'categories' => $this->getCategoriesWithSubcategories($category->descendants),
+                'orderby' => $category->orderby,
+                'categories' => $this->getCategoriesWithSubcategories($category->descendants)->where('status', 'Active'),
             ];
         });
     }
+    
+    
 
     public function store(Request $request)
     {
@@ -160,8 +169,20 @@ class CategoryController extends BaseController
     public function getArticlesbyslug($slug)
     {
         $category = Category::where('slug', $slug)->first();
+        if ($category) {
+            $category->parenttitle = $category->parent->title ?? null;
+            $category->grandtitle = $category->parent->parent->title ?? null;
+        }
         $news = $category->news()->orderBy('orderby', 'asc')->paginate(10);
+        
 
-        return $this->sendResponse($news, 'Articles retrieved successfully.');
+        $response = [
+            'category' => $category,
+            'news' => $news,
+        ];
+
+        
+
+        return $this->sendResponse($response, 'Articles retrieved successfully.');
     }
 }
