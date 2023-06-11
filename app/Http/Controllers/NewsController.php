@@ -12,7 +12,7 @@ class NewsController extends BaseController
 {
     public function index()
     {
-        $news = News::all();
+        $news = News::orderBy('orderby', 'asc')->get();
 
         return $this->sendResponse(NewsResource::collection($news), 'News retrieved successfully.');
     }
@@ -148,7 +148,7 @@ class NewsController extends BaseController
 
         $news = News::whereHas('speciality', function ($query) use ($slug) {
             $query->where('name', $slug);
-        })->paginate($param);
+        })->where('status', 'Active')->orderBy('orderby', 'asc')->paginate($param);
 
         return $this->sendResponse($news, 'News retrieved successfully.');
     }

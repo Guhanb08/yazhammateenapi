@@ -173,7 +173,7 @@ class CategoryController extends BaseController
             $category->parenttitle = $category->parent->title ?? null;
             $category->grandtitle = $category->parent->parent->title ?? null;
         }
-        $news = $category->news()->orderBy('orderby', 'asc')->paginate(10);
+        $news = $category->news()->where('status', 'Active')->orderBy('orderby', 'asc')->paginate(10);
         
 
         $response = [

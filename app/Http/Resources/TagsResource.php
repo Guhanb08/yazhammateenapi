@@ -27,7 +27,7 @@ class TagsResource extends JsonResource
             'orderby' => $this->orderby,
             'isgeneral' => $this->isgeneral,
             'status' => $this->status,
-            'news' =>  NewsResource::collection($this->news),
+            'news' =>  NewsResource::collection($this->news->where('status', 'Active')->sortby('orderby')),
             'deleted_at' => $this->deleted_at ? $this->deleted_at->format('d/m/Y') : null,
             'created_at' => $this->created_at->format('d/m/Y'),
             'updated_at' => $this->updated_at->format('d/m/Y'),

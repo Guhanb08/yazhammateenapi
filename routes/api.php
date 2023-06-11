@@ -45,6 +45,7 @@ Route::controller(RegisterController::class)->group(function () {
     Route::get('/articles/{slug}', [NewsController::class, 'getArticlesbyslug']);
     Route::put('/article/status/{id}', [NewsController::class, 'updateStatus']);
     Route::get('/allbanner', [BannerController::class, 'getallbanners']);
+    Route::get('/allsectionnames', [SpecialityController::class, 'getallsectionnames']);
     Route::get('/tagswitharticles', [TagsController::class, 'getallarticles']);
 
 

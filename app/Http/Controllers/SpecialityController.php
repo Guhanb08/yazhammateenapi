@@ -16,6 +16,23 @@ class SpecialityController extends BaseController
 
         return $this->sendResponse(SpecialityResource::collection($speciality), 'Speciality retrieved successfully.');
     }
+
+    public function getallsectionnames()
+    {
+        $banner = Speciality::all();
+
+        $result = [];
+
+        foreach ($banner as $item) {
+            $name = $item['name'];
+            $value = $item['title'];
+            $result[$name] = $value;
+        }
+        return $this->sendResponse($result, 'Speciality retrieved successfully.');
+
+    }
+
+
     public function store(Request $request)
     {
         $input = $request->all();
