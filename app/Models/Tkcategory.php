@@ -48,6 +48,6 @@ class Tkcategory extends Model
 
     public function tknews()
     {
-        return $this->belongsToMany(TkNews::class  , 'tknews_categories' ,  'category_id', 'news_id'  );
+        return $this->belongsToMany(Tknews::class  , 'tknews_categories' ,  'category_id', 'news_id'  );
     }
 }

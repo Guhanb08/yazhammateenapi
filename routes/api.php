@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SpecialityController;
@@ -36,6 +37,7 @@ Route::controller(RegisterController::class)->group(function () {
     Route::apiResource('tags', TagsController::class);
     Route::apiResource('speciality', SpecialityController::class);
     Route::apiResource('banner', BannerController::class);
+    Route::apiResource('general', GeneralController::class);
     Route::apiResource('category', CategoryController::class);
     Route::apiResource('article', NewsController::class);
     Route::get('/categories', [CategoryController::class, 'getCategories']);
@@ -62,7 +64,6 @@ Route::controller(RegisterController::class)->group(function () {
     Route::get('/tksubcategories/category/{id}', [TkcategoryController::class, 'getSubCategoriesByCategoryId']);
 
     Route::get('/tkarticles/category/{slug}', [TkcategoryController::class, 'getArticlesbyslug']);
-    Route::get('/tkarticles/speciality/{slug}', [TknewsController::class, 'getArticlesbySpeciality']);
     Route::get('/tkarticles/{slug}', [TknewsController::class, 'getArticlesbyslug']);
     Route::put('/tkarticle/status/{id}', [TknewsController::class, 'updateStatus']);
 

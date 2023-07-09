@@ -140,16 +140,5 @@ class TknewsController extends BaseController
         }
     }
 
-    public function getArticlesbySpeciality(Request $request, $slug)
-    {
-   
-        $param = $request->query('pagesize');
-
-        $news = Tknews::whereHas('speciality', function ($query) use ($slug) {
-            $query->where('name', $slug);
-        })->where('status', 'Active')->orderBy('orderby', 'asc')->paginate($param);
-
-        return $this->sendResponse($news, 'News retrieved successfully.');
-    }
 
 }
