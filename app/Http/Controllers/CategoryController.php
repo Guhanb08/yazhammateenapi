@@ -113,6 +113,8 @@ class CategoryController extends BaseController
                 $category->status = $input['status'];
                 $category->orderby = $input['orderby'];
                 $category->brief = $input['brief'];
+                $category->image = $input['image'];
+                $category->bookflag = $input['bookflag'];
                 $category->type =  $input['type'];
                 $category->parent_id = isset($input['parent_id']) ? $input['parent_id'] :    $category->parent_id;
                 $category->category_id = isset($input['category_id']) ? $input['category_id'] : $category->category_id;

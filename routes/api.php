@@ -66,6 +66,8 @@ Route::controller(RegisterController::class)->group(function () {
     Route::get('/tkarticles/category/{slug}', [TkcategoryController::class, 'getArticlesbyslug']);
     Route::get('/tkarticles/{slug}', [TknewsController::class, 'getArticlesbyslug']);
     Route::put('/tkarticle/status/{id}', [TknewsController::class, 'updateStatus']);
+    Route::get('/bookcategories/cat/{id}', [TkcategoryController::class, 'getBookCategories']);
+
 
 
 

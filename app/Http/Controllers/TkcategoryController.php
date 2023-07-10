@@ -31,7 +31,8 @@ class TkcategoryController extends BaseController
 
     private function getCategoriesWithSubcategories($categories)
     {
-        return $categories->where('status', 'Active')->map(function ($category) {
+        //                ->where('status', 'Active')
+        return $categories->map(function ($category) {
             return [
                 'id' => $category->id,
                 'title' => $category->title,
@@ -40,7 +41,8 @@ class TkcategoryController extends BaseController
                 'description' => $category->description,
                 'status' => $category->status,
                 'orderby' => $category->orderby,
-                'categories' => $this->getCategoriesWithSubcategories($category->descendants)->where('status', 'Active'),
+                'categories' => $this->getCategoriesWithSubcategories($category->descendants),
+                // ->where('status', 'Active')
             ];
         });
     }
@@ -53,7 +55,7 @@ class TkcategoryController extends BaseController
 
         $validator = Validator::make($input, [
             'title' => 'required',
-            'slug' => 'required',
+            // 'slug' => 'required',
             'type' => 'required',
             'status' => 'required',
         ]);
@@ -62,15 +64,15 @@ class TkcategoryController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors());
         }
 
-        // $category = Tkcategory::create($input);
+        $category = Tkcategory::create($input);
 
-        $categoryExists = Tkcategory::where('slug', $input['slug'])->first();
+      /*   $categoryExists = Tkcategory::where('slug', $input['slug'])->first();
 
         if (!$categoryExists) {
             $category = Tkcategory::create($input);
         } else {
             return $this->sendError('Slug Already Exists', $validator->errors());
-        }
+        } */
 
         return $this->sendResponse(new TkcategoryResource($category), 'Category created successfully.');
     }
@@ -94,7 +96,6 @@ class TkcategoryController extends BaseController
 
         $validator = Validator::make($input, [
             'title' => 'required',
-            'slug' => 'required',
             'type' => 'required',
             'status' => 'required',
         ]);
@@ -105,7 +106,7 @@ class TkcategoryController extends BaseController
 
         $categoryExists = Tkcategory::where('slug', $input['slug'])->where('id', '!=', $id)->first();
 
-        if (!$categoryExists) {
+        // if (!$categoryExists) {
             $category = Tkcategory::find($id); // Retrieve the user with ID 1
             if ($category) {
                 $category->title = $input['title'];
@@ -121,9 +122,9 @@ class TkcategoryController extends BaseController
             } else {
                 return $this->sendError('Data Not Found');
             }
-        } else {
+       /*  } else {
             return $this->sendError('Slug Already Exists', $validator->errors());
-        }
+        } */
     }
 
 
@@ -184,5 +185,21 @@ class TkcategoryController extends BaseController
         
 
         return $this->sendResponse($response, 'Articles retrieved successfully.');
+    }
+
+
+    public function getBookCategories( Request $request , $catid )
+    {
+
+        $query =  Tkcategory::where('cat_id', $catid);
+
+        if ($request->has('status')) {
+            $status = $request->input('status');
+            $query->where('status', $status);
+        }
+        $query->orderBy('orderby', 'asc');
+        $category = $query->get();
+        $categoriesWithSubcategories = $this->getCategoriesWithSubcategories($category);
+        return $this->sendResponse($categoriesWithSubcategories, 'Category retrieved successfully.');
     }
 }

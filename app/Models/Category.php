@@ -16,7 +16,7 @@ class Category extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'title', 'type', 'slug', 'brief', 'description', 'parent_id',  'category_id', 'orderby', 'status'
+        'title', 'type', 'slug', 'brief', 'bookflag' , 'image' , 'description', 'parent_id',  'category_id', 'orderby', 'status'
     ];
 
     public function parent()
@@ -48,5 +48,10 @@ class Category extends Model
     public function news()
     {
         return $this->belongsToMany(News::class  , 'news_categories' ,  'category_id', 'news_id'  );
+    }
+
+    public function tkcategories()
+    {
+        return $this->hasMany(Tkcategory::class, 'cat_id');
     }
 }

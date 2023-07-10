@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('title');
             $table->string('type')->default('Active');
             $table->text('slug')->nullable();
+            $table->text('image')->nullable();
+            $table->string('bookflag')->default('No');
             $table->text('brief')->nullable();
             $table->text('description')->nullable();
             $table->unsignedBigInteger('parent_id')->nullable();

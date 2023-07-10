@@ -19,7 +19,9 @@ return new class extends Migration
             $table->text('brief')->nullable();
             $table->text('description')->nullable();
             $table->unsignedBigInteger('parent_id')->nullable();
+            $table->unsignedBigInteger('cat_id')->nullable();
             $table->foreign('parent_id')->references('id')->on('tkcategories')->onDelete('cascade');
+            $table->foreign('cat_id')->references('id')->on('categories')->onDelete('cascade');
             $table->integer('category_id')->nullable();
             $table->integer('orderby')->nullable();
             $table->string('status')->default('Inactive');
