@@ -37,6 +37,8 @@ class CategoryController extends BaseController
                 'title' => $category->title,
                 'slug' => $category->slug,
                 'brief' => $category->brief,
+                'bookflag' => $category->bookflag,
+                'image' => $category->image,
                 'description' => $category->description,
                 'status' => $category->status,
                 'orderby' => $category->orderby,
