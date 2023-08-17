@@ -26,7 +26,10 @@ class BannerController extends BaseController
         foreach ($banner as $item) {
             $name = $item['name'];
             $value = $item['value'];
+            $url = $item['name'] . "url";
             $result[$name] = $value;
+            $result[$url] = $item['url'];
+
         }
         return $this->sendResponse($result, 'Banner retrieved successfully.');
 
@@ -66,7 +69,7 @@ class BannerController extends BaseController
         $banner = Banner::find($id); // Retrieve the user with ID 1
         if ($banner) {
             $banner->value = $input['value'];
-
+            $banner->url = $input['url'];
             $banner->save();
             return $this->sendResponse(new BannerResource($banner), 'Banner updated successfully.');
         } else {
