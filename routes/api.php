@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\BannerController;
+use App\Http\Controllers\BkcategoryController;
+use App\Http\Controllers\BklistController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\NewsController;
@@ -14,6 +16,7 @@ use App\Http\Controllers\TkcategoryController;
 use App\Models\Category;
 use App\Models\News;
 use App\Http\Controllers\TknewsController;
+
 
 
 
@@ -69,6 +72,25 @@ Route::controller(RegisterController::class)->group(function () {
     Route::get('/bookcategories/cat/{id}', [TkcategoryController::class, 'getBookCategories']);
 
 
+
+
+    Route::apiResource('bkcategory', BkcategoryController::class);
+    Route::get('/bkcategories', [BkcategoryController::class, 'getCategories']);
+    Route::get('/bksubcategories', [BkcategoryController::class, 'getSubCategories']);
+    Route::get('/bkchildcategories', [BkcategoryController::class, 'getChildCategories']);
+    Route::get('/bkgrandchildcategories', [BkcategoryController::class, 'getGrandChildCategories']);
+    Route::get('/bksubcategories/category/{id}', [BkcategoryController::class, 'getSubCategoriesByCategoryId']);
+    Route::get('/bkchildcategories/category/{id}', [BkcategoryController::class, 'getChildCategoriesByCategoryId']);
+    Route::get('/booklist', [BkcategoryController::class, 'getbooklist']);
+
+
+
+
+    Route::apiResource('bklist', BklistController::class);
+    Route::get('/bklist/cat/{id}', [BklistController::class, 'getBookCategories']);
+
+    Route::get('/bklistsubcategories/category/{id}', [BklistController::class, 'getSubCategoriesByCategoryId']);
+    
 
 
 // });
