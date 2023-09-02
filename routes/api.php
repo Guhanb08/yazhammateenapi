@@ -75,6 +75,8 @@ Route::controller(RegisterController::class)->group(function () {
 
 
     Route::apiResource('bkcategory', BkcategoryController::class);
+    Route::get('/bkallcategories/category/{id}', [BkcategoryController::class, 'getallCategories']);
+    Route::get('/bksublistcategory/category/{id}', [BkcategoryController::class, 'getsublistCategories']);
     Route::get('/bkcategories', [BkcategoryController::class, 'getCategories']);
     Route::get('/bksubcategories', [BkcategoryController::class, 'getSubCategories']);
     Route::get('/bkchildcategories', [BkcategoryController::class, 'getChildCategories']);

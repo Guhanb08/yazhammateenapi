@@ -142,6 +142,20 @@ class BkcategoryController extends BaseController
             return $this->sendError('Data Not Found');
         }
     }
+    public function getallCategories($id)
+    {
+        $categories = Bkcategory::where('slug', $id)->orderBy('orderby', 'asc')->get();
+        return $this->sendResponse($categories, 'Category retrieved successfully.');
+    }
+
+    public function getsublistCategories($id)
+    {
+        $categories = Bkcategory::where('slug', $id)->orderBy('orderby', 'asc')->get();
+
+        $categoriesWithSubcategories = $this->getCategoriesWithSubcategories($categories);
+        return $this->sendResponse($categoriesWithSubcategories, 'Category retrieved successfully.');
+       
+    }
 
     public function getCategories()
     {
